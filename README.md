@@ -225,6 +225,3 @@ Email: sabhya89a@gmail.com
 
 ---
 
-## License
-
-This project is intended for educational and portfolio purposes.
