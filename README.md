@@ -1,4 +1,4 @@
-# Task Tracker
+ # Task Tracker
 
 A full-stack task management application built with the MERN stack (MongoDB, Express.js, React, Node.js). Users sign up and log in with email and password, then manage their own private task list.
 
