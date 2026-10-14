@@ -50,7 +50,6 @@ cd Backend
 npm install
 ```
 
-Create a `.env` file in the `Backend` folder (see `.env.example`):
 
 ```
 PORT=5000
@@ -104,7 +103,6 @@ The frontend runs on the URL Vite prints (by default `http://localhost:5173`) an
 | `MONGO_URI` | MongoDB connection string |
 | `JWT_SECRET` | Secret used to sign and verify JWTs |
 
-Never commit your `.env` file.
 
 ## Future Improvements
 
