@@ -219,7 +219,7 @@ This project helped strengthen my understanding of:
 
 GitHub: https://github.com/SabhyaLimbu
 
-LinkedIn: Add your LinkedIn profile here
+LinkedIn: 
 
 Email: sabhya89a@gmail.com
 
