@@ -1,15 +1,9 @@
-import React from 'react';
-
-const Footer = () => {
-  const year = new Date().getFullYear();
-  const name = "Task Tracker App";
-  const description = "All rights reserved";
-
-  return (
-    <div className="flex justify-center items-center h-16 text-white font-bold fixed bottom-0 w-full bg-black">
-      &copy; {year} | {name} | {description}
+const Footer = () => (
+  <footer className="site-footer">
+    <div className="container">
+      &copy; {new Date().getFullYear()} Task Tracker App. All rights reserved.
     </div>
-  );
-};
+  </footer>
+);
 
 export default Footer;

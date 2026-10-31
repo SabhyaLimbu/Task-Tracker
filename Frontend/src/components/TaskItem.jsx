@@ -1,40 +1,167 @@
-import React from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import Icon from './Icon';
+import {
+  NEXT_PRIORITY,
+  PRIORITY_LABEL,
+  REPEAT_LABEL,
+  isDueToday,
+  isOverdue,
+} from '../utils/taskUtils';
 
-const TaskItem = ({ task, onDelete, onEdit, onToggle }) => {
-    return (
-        <div className="task-item flex items-center justify-between p-3 bg-white rounded-lg shadow mb-2">
-            <div className="flex items-center space-x-3 flex-grow">
-                <input
-                    type="checkbox"
-                    checked={task.completed}
-                    onChange={() => onToggle(task._id, { completed: !task.completed })}
-                    className="w-5 h-5 rounded text-blue-600 focus:ring-blue-500"
-                />
-                <span 
-                    className={`flex-grow ${task.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}
-                >
-                    {task.title}
-                </span>
-            </div>
-            <div className="flex space-x-2">
-                <button
-                    onClick={() => onEdit(task._id)}
-                    className="text-blue-500 hover:text-blue-700 p-1 rounded-full hover:bg-blue-50"
-                    aria-label="Edit task"
-                >
-                    <FaEdit />
-                </button>
-                <button
-                    onClick={() => onDelete(task._id)}
-                    className="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50"
-                    aria-label="Delete task"
-                >
-                    <FaTrash />
-                </button>
-            </div>
-        </div>
-    );
+const TaskItem = ({
+  task,
+  info = {},
+  archivedView = false,
+  draggable = false,
+  dragging = false,
+  dragOver = false,
+  onDragStartItem,
+  onDragOverItem,
+  onDropItem,
+  onDragEndItem,
+  onDelete,
+  onEdit,
+  onToggle,
+  onArchive,
+  onRestore,
+  onMetaChange,
+}) => {
+  const priority = info.priority || 'medium';
+  const repeat = info.repeat || 'none';
+  const overdue = isOverdue(task, info);
+  const dueToday = isDueToday(task, info);
+
+  const classes = [
+    'task-item',
+    task.completed && 'completed',
+    overdue && 'is-overdue',
+    dragging && 'dragging',
+    dragOver && 'drag-over',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  return (
+    <div
+      className={classes}
+      draggable={draggable}
+      onDragStart={(event) => {
+        if (!draggable) return;
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', task._id);
+        onDragStartItem(task._id);
+      }}
+      onDragOver={(event) => {
+        if (!draggable) return;
+        event.preventDefault();
+        onDragOverItem(task._id);
+      }}
+      onDrop={(event) => {
+        if (!draggable) return;
+        event.preventDefault();
+        onDropItem(task._id);
+      }}
+      onDragEnd={() => draggable && onDragEndItem()}
+    >
+      {draggable && (
+        <span className="drag-handle" title="Drag to reorder" aria-hidden="true">
+          ⋮⋮
+        </span>
+      )}
+
+      <label className="task-main">
+        <input
+          type="checkbox"
+          checked={!!task.completed}
+          disabled={archivedView}
+          onChange={() => onToggle(task._id)}
+        />
+        <span className="task-title">{task.title}</span>
+      </label>
+
+      <div className="task-meta">
+        <button
+          type="button"
+          className={`chip priority-${priority}`}
+          title="Click to change priority"
+          disabled={archivedView}
+          onClick={() =>
+            onMetaChange(task._id, { priority: NEXT_PRIORITY[priority] })
+          }
+        >
+          {PRIORITY_LABEL[priority]}
+        </button>
+
+        <input
+          type="date"
+          className={`due-input${overdue ? ' overdue' : ''}${dueToday ? ' today' : ''}`}
+          aria-label="Due date"
+          title={overdue ? 'Overdue' : dueToday ? 'Due today' : 'Due date'}
+          value={info.due || ''}
+          disabled={archivedView}
+          onChange={(event) => onMetaChange(task._id, { due: event.target.value })}
+        />
+
+        <select
+          className={`repeat-select${repeat !== 'none' ? ' on' : ''}`}
+          aria-label="Repeat"
+          title="Repeat: a new task is created when you complete this one"
+          value={repeat}
+          disabled={archivedView}
+          onChange={(event) => onMetaChange(task._id, { repeat: event.target.value })}
+        >
+          {Object.entries(REPEAT_LABEL).map(([value, label]) => (
+            <option key={value} value={value}>
+              {value === 'none' ? 'Repeat' : label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="task-actions">
+        {!archivedView && (
+          <button
+            type="button"
+            className="icon-btn"
+            aria-label="Edit task"
+            title="Edit"
+            onClick={() => onEdit(task._id)}
+          >
+            <Icon name="edit" />
+          </button>
+        )}
+        {archivedView ? (
+          <button
+            type="button"
+            className="icon-btn archive"
+            aria-label="Restore task"
+            title="Restore"
+            onClick={() => onRestore(task._id)}
+          >
+            <Icon name="restore" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="icon-btn archive"
+            aria-label="Archive task"
+            title="Archive"
+            onClick={() => onArchive(task._id)}
+          >
+            <Icon name="archive" />
+          </button>
+        )}
+        <button
+          type="button"
+          className="icon-btn delete"
+          aria-label="Delete task"
+          title="Delete"
+          onClick={() => onDelete(task._id)}
+        >
+          <Icon name="trash" />
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default TaskItem;

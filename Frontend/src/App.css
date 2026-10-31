@@ -1,42 +1,282 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #30283a;
+  background: #fff9fc;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --pink: #ed4f9b;
+  --pink-dark: #d93683;
+  --pink-light: #fff0f7;
+  --text: #30283a;
+  --muted: #918796;
+  --border: #f0e7ee;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 10% 0%, #ffe9f4 0, transparent 34%),
+    #fff9fc;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
 #root {
-  max-width: 1280px;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard {
+  width: min(100% - 48px, 920px);
   margin: 0 auto;
-  padding: 2rem;
+  padding: 64px 0 72px;
+  flex: 1;
+}
+
+.welcome-section {
+  margin-bottom: 34px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--pink-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.welcome-section h1 {
+  margin: 0;
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(32px, 5vw, 46px);
+  font-weight: 800;
+  letter-spacing: -1.8px;
+  line-height: 1.2;
+}
+
+.welcome-section h1 span {
+  color: var(--pink);
+}
+
+.welcome-section p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.task-panel {
+  padding: 30px;
+  border: 1px solid #f4e9f0;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 40px rgba(111, 57, 87, 0.07);
+}
+
+.task-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.task-panel-heading h2 {
+  margin: 0;
+  font-family: 'Manrope', sans-serif;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.task-panel-heading p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.task-counter {
+  padding: 10px 13px;
+  border-radius: 12px;
+  background: var(--pink-light);
+  color: #9b6682;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.task-counter span {
+  color: var(--pink-dark);
+  font-weight: 800;
+}
+
+.add-task-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.add-task-container input {
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  height: 52px;
+  padding: 0 17px;
+  border: 1px solid #eadfe7;
+  border-radius: 12px;
+  outline: none;
+  background: #fff;
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color 180ms, box-shadow 180ms;
+}
+
+.add-task-container input::placeholder {
+  color: #b3a6b1;
+}
+
+.add-task-container input:focus {
+  border-color: #ed83b5;
+  box-shadow: 0 0 0 4px rgba(237, 79, 155, 0.10);
+}
+
+/* Style the existing Button component without changing its functionality. */
+.add-task-container button {
+  min-height: 52px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--pink);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 5px 12px rgba(237, 79, 155, 0.18);
+  transition: background 180ms, transform 180ms;
+}
+
+.add-task-container button:hover:not(:disabled) {
+  background: var(--pink-dark);
+  transform: translateY(-1px);
+}
+
+.add-task-container button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* These rules also help if TaskItem uses simple card-like markup. */
+.task-list > * {
+  min-width: 0;
+}
+
+.empty-state {
+  padding: 36px 18px;
+  border: 1px dashed #eddae6;
+  border-radius: 15px;
+  background: #fffbfd;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #4ac1a5aa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #ac3894aa);
+.empty-icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 12px;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--pink-light);
+  color: var(--pink);
+  font-size: 23px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.empty-state h3 {
+  margin: 0 0 7px;
+  font-size: 16px;
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    width: calc(100% - 28px);
+    padding: 40px 0;
   }
-  to {
-    transform: rotate(360deg);
+
+  .welcome-section {
+    margin-bottom: 25px;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .welcome-section h1 {
+    letter-spacing: -1px;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .task-panel {
+    padding: 19px 15px;
+    border-radius: 17px;
+  }
 
-.read-the-docs {
-  color: #af1616;
+  .task-panel-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .add-task-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .add-task-container input {
+    width: 100%;
+  }
+
+  .add-task-container button {
+    width: 100%;
+  }
 }

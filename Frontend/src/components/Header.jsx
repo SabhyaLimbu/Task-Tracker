@@ -1,92 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Button from './Button';
+import { Link, NavLink } from 'react-router-dom';
+import { useProfile } from '../hooks/useProfile';
 
 const Header = ({ user, onLogout }) => {
+  const { displayName, initials } = useProfile(user);
+
   return (
-    <header className="header">
-      <div className="header-content">
-        <Link to="/" className="logo">
-          <h1>Task Tracker</h1>
-        </Link>
-        
-        <nav className="nav">
-          {user ? (
-            <div className="user-nav">
-              <span className="user-email">{user.email}</span>
-              <Button 
-                onClick={onLogout}
-                className="logout-btn"
-                variant="outline"
-              >
-                Logout
-              </Button>
-            </div>
-          ) : (
-            <div className="auth-links">
-              <Link to="/login" className="login-link">
-                <Button variant="text">Login</Button>
-              </Link>
-              <Link to="/signup">
-                <Button>Sign Up</Button>
-              </Link>
-            </div>
-          )}
-        </nav>
+    <header className="site-header">
+      <div className="container">
+        <div className="header-left">
+          <Link to="/" className="site-logo">Task Tracker</Link>
+          <nav className="main-nav" aria-label="Main">
+            <NavLink to="/" end>Tasks</NavLink>
+            <NavLink to="/profile">Profile</NavLink>
+          </nav>
+        </div>
+
+        <div className="header-right">
+          <Link to="/profile" className="header-profile" title={user?.email}>
+            <span className="avatar avatar-sm">{initials}</span>
+            <span className="header-user">{displayName}</span>
+          </Link>
+          <button type="button" className="logout-btn" onClick={onLogout}>
+            Logout
+          </button>
+        </div>
       </div>
-      <style jsx>{`
-        .header {
-          background-color: #ffffff;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          padding: 1rem 0;
-          margin-bottom: 2rem;
-        }
-        
-        .header-content {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 1rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        
-        .logo {
-          text-decoration: none;
-          color: #333;
-        }
-        
-        .logo h1 {
-          margin: 0;
-          font-size: 1.5rem;
-          font-weight: 700;
-        }
-        
-        .nav {
-          display: flex;
-          align-items: center;
-        }
-        
-        .user-nav {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-        
-        .user-email {
-          font-size: 0.9rem;
-          color: #666;
-        }
-        
-        .auth-links {
-          display: flex;
-          gap: 0.5rem;
-        }
-        
-        .login-link {
-          text-decoration: none;
-        }
-      `}</style>
     </header>
   );
 };
